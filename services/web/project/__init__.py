@@ -3,34 +3,38 @@ import os
 from werkzeug.utils import secure_filename
 from flask import (
     Flask,
+    request,
+    redirect,
+    url_for,
     render_template
 )
 from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
-app.config.from_object("project.config.Config")
+app.config.from_object('project.config.Config')
 db = SQLAlchemy(app)
 
 
-class User(db.Model):
-    __tablename__ = "users"
+class Todo(db.Model):
+    __tablename__ = 'todos'
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(128), unique=True, nullable=False)
-    active = db.Column(db.Boolean(), default=True, nullable=False)
+    description = db.Column(db.String(), nullable=False)
 
-    def __init__(self, email):
-        self.email = email
+    def __repr__(self):
+        return f'<Todo {self.id} {self.description}'
+        
 
+@app.route('/todos/create', methods=['POST'])
+def create_todo():
+    description = request.form.get('description', '')
+    todo = Todo(description=description)
+    db.session.add(todo)
+    db.session.commit()
+    return redirect(url_for('index'))
 
-@app.route("/")
+@app.route('/')
 def index():
-    return render_template('index.html', data=[{
-        'description': 'Todo 1'
-    }, {
-        'description': 'Todo 2'
-    }, {
-        'description': 'Todo 3'
-    }])
+    return render_template('index.html', data=Todo.query.all())
 
