@@ -12,5 +12,7 @@ then
 fi
 
 #python manage.py create_db
+python manage.py db migrate -d project/migrations
+python manage.py db upgrade -d project/migrations
 
 exec "$@"

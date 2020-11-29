@@ -1,3 +1,4 @@
+import click
 from flask.cli import FlaskGroup
 
 from project import app, db
@@ -17,6 +18,11 @@ def create_db():
 def create_db():
     db.drop_all()
     db.create_all()
+    db.session.commit()
+
+@cli.command("drop_db")
+def drop_db():
+    db.drop_all()
     db.session.commit()
 
 
