@@ -9,6 +9,7 @@ from flask import (
 from project import app, db
 from project.models import Todo
 
+
 @app.route('/todos/create', methods=['POST'])
 def create_todo():
     error = False
@@ -39,8 +40,20 @@ def set_completed_todos(todo_id):
         db.session.rollback()
     finally:
         db.session.close()
-
     return redirect(url_for('index'))
+
+
+@app.route('/todos/<todo_id>', methods=['DELETE'])
+def delete_todos(todo_id):
+    try:
+        Todo.query.filter_by(id=todo_id).delete()
+        db.session.commit()
+    except:
+        db.session.rollback()
+    finally:
+        db.session.close()
+    return jsonify({ 'success': True })
+
 
 @app.route('/')
 def index():
