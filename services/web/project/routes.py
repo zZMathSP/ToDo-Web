@@ -17,11 +17,11 @@ def create_todo():
     try:
         description = request.get_json()['description']
         list_id = request.get_json()['list_id']
-        todo = Todo(description=description, complete=False, list_id=list_id)
+        todo = Todo(description=description, completed=False, list_id=list_id)
         db.session.add(todo)
         db.session.commit()
         body['id'] = todo.id
-        body['complete'] = todo.complete
+        body['completed'] = todo.completed
         body['description'] = todo.description
     except():
         db.session.rollback()
@@ -38,10 +38,10 @@ def create_todo():
 def update_todo(todo_id):
     error = False
     try:
-        complete = request.get_json()['complete']
+        completed = request.get_json()['completed']
         todo = Todo.query.get(todo_id)
         print('Todo: ', todo)
-        todo.complete = complete
+        todo.completed = completed
         db.session.commit()
     except():
         db.session.rollback()
