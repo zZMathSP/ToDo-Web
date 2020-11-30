@@ -60,12 +60,12 @@
         </form>
         <div id="error" class="hidden">Something went wrong!</div>
         <ul id="todos">
-            {% for d in data %}
+            {% for todo in todos %}
             <li>
-                <input class="check-completed" data-id="{{ d.id }}" type="checkbox" {% if d.completed %} checked
+                <input class="check-completed" data-id="{{ todo.id }}" type="checkbox" {% if todo.completed %} checked
                     {% endif %} />
-                {{ d.description }}
-                <button class="delete" data-id="{{ d.id }}">&cross;</button>
+                {{ todo.description }}
+                <button class="delete" data-id="{{ todo.id }}">&cross;</button>
             </li>
             {% endfor %}
         </ul>
